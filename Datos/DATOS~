@@ -1,0 +1,75 @@
+# Vuelos (Origen, Destino, Fecha, Asientos disponibles, Precio)
+VUELO,Chiclayo,Lima,2024-07-22,110,150.99
+VUELO,Lima,Chiclayo,2024-07-25,120,130.50
+VUELO,Chiclayo,Piura,2024-07-22,95,85.50
+VUELO,Piura,Chiclayo,2024-07-25,95,85.50
+VUELO,Chiclayo,Cajamarca,2024-07-23,105,100.50
+VUELO,Cajamarca,Chiclayo,2024-07-25,105,100.50
+VUELO,Lima,Trujillo,2024-08-28,124,99.90
+VUELO,Trujillo,Lima,2024-08-15,100,99.90
+
+
+# Pasajeros (Nombre, Email, Teléfono, Vuelo, DNI, Pagado)
+PASAJERO,Cristian,isCrizzz@gmail.com,948531627,1,61425878,true
+PASAJERO,Marcelo,utpthepolsent@gmail.com,912364850,1,78462531,true
+PASAJERO,David,davidcolocho@gmail.com,948152637,1,48592610,false
+PASAJERO,Daniel,daniel01@gmail.com,912364854,1,78451480,false
+PASAJERO,Rodrigo,rodrigo01@gmail.com,912364852,1,68412450,true
+PASAJERO,Kiara,kiara123@gmail.com,987456321,1,60142587,false
+PASAJERO,Sofía,sofia345@gmail.com,978901356,1,16784523,true
+PASAJERO,Guillermo,guillermo890@gmail.com,956789021,1,67451237,false
+PASAJERO,Lorena,lorena123@gmail.com,967890132,1,78452316,true
+PASAJERO,Arturo,arturo456@gmail.com,978901243,1,41527385,false
+PASAJERO,Ignacio,ignacio123@gmail.com,912345678,1,60123457,true
+PASAJERO,Paloma,paloma456@gmail.com,923456789,1,71234568,false
+PASAJERO,Hugo,hugo789@gmail.com,934567890,1,16782354,true
+PASAJERO,Susana,susana012@gmail.com,945678901,1,67451237,false
+PASAJERO,Emilio,emilio345@gmail.com,956789012,1,78451236,true
+
+PASAJERO,Jesus,thepolsent01@gmail.com,926348157,2,57846859,true
+PASAJERO,Carlos,carlos1999@gmail.com,974874874,2,70824065,false
+PASAJERO,Ariana,arianavr@gmail.com,985658444,2,73566984,true
+PASAJERO,Mauricio,almendrita@gmail.com,987456321,2,73384569,false
+PASAJERO,Isabel,isabel567@gmail.com,912345789,2,78412365,true
+PASAJERO,Andrés,andres890@gmail.com,923456801,2,41567823,false
+PASAJERO,Patricia,patricia123@gmail.com,934567912,2,16742358,true
+PASAJERO,Jorge,jorge456@gmail.com,945678023,2,64175823,false
+PASAJERO,Carmen,carmen789@gmail.com,956789134,2,78451267,true
+PASAJERO,Fernando,fernando012@gmail.com,967890245,2,41527368,false
+PASAJERO,Lidia,lidia678@gmail.com,967890123,2,41527385,false
+PASAJERO,Ramón,ramon901@gmail.com,978901234,2,16782354,true
+PASAJERO,Cintia,cintia234@gmail.com,989012345,2,64157238,false
+PASAJERO,Álvaro,alvaro567@gmail.com,990123456,2,78451234,true
+PASAJERO,Florencia,florencia890@gmail.com,912345679,2,41567238,false
+
+PASAJERO,Javier,javier01@gmail.com,902640150,3,60051937,true
+PASAJERO,Daniel,daniel01@gmail.com,91236485,3,78451480,false
+PASAJERO,Rubí,Delosangeles@gmail.com,967758510,3,23205160,true
+PASAJERO,Sofia,sofiCer@gmail.com,999333547,3,93824651,true
+PASAJERO,Marta,marta106@gmail.com,987654329,3,10234565,false
+PASAJERO,Pedro,pedro107@gmail.com,987654330,3,41234566,false
+PASAJERO,Rosa,rosa108@gmail.com,987654331,3,61234567,true
+PASAJERO,Miguel,miguel109@gmail.com,987654332,3,71234568,true
+PASAJERO,Elena,elena104@gmail.com,987654327,3,61234563,false
+PASAJERO,Lucía,lucia567@gmail.com,934567810,3,78451234,true
+PASAJERO,Matías,matias123@gmail.com,923456780,3,16782345,true
+PASAJERO,Renata,renata456@gmail.com,934567891,3,67451237,false
+PASAJERO,Esteban,esteban789@gmail.com,945678902,3,78452316,true
+PASAJERO,Olivia,olivia012@gmail.com,956789013,3,41527385,false
+PASAJERO,Sergio,sergio345@gmail.com,967890124,3,16782354,true
+
+PASAJERO,Luis,luis01@gmail.com,999333547,4,93824651,true
+PASAJERO,Gustavo,gustavo01@gmail.com,91236485,4,78451026,true
+PASAJERO,Leonardo,nardoxzzz@gmail.com,973990747,4,78569842,false
+PASAJERO,Marisela,marIs@gmail.com,985466328,4,60405896,true
+PASAJERO,Juan García,juan456@gmail.com,987654322,4,41234568,true
+PASAJERO,María López,maria789@gmail.com,987654323,4,61234569,false
+PASAJERO,Carlos Sánchez,carlos101@gmail.com,987654324,4,71234560,true
+PASAJERO,Laura Torres,laura102@gmail.com,987654325,4,10234561,true
+PASAJERO,José Rojas,jose103@gmail.com,987654326,4,41234562,false
+PASAJERO,Luis Ramírez,luis105@gmail.com,987654328,4,71234564,true
+PASAJERO,Ángela,angela678@gmail.com,978901235,4,67451237,false
+PASAJERO,Héctor,hector901@gmail.com,989012346,4,78452316,true
+PASAJERO,Rosa,rosa234@gmail.com,990123457,4,41527385,false
+PASAJERO,Eduardo,eduardo567@gmail.com,912345688,4,16782354,true
+PASAJERO,Bianca,bianca890@gmail.com,923456791,4,64157238,false

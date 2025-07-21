@@ -1,0 +1,6 @@
+AB123CD,Aerolíneas XYZ,Boeing 737,true,10,500.0,true,true,20,350.0,true,false,80,150.0,true,true
+XY987ZT,AeroGlobal,Airbus A320,true,10,550.0,false,false,20,400.0,false,true,60,200.0,false,false
+LM456GH,SkyJet,Embraer 190,true,10,450.0,true,false,30,300.0,true,true,70,200.0,true,true
+PQ789JK,United Airlines,Boeing 747,true,10,600.0,true,true,20,400.0,true,true,80,200.0,true,true
+CD123EF,Aerolineas Argentinas,Boeing 737,true,10,500.0,true,true,20,350.0,true,false,80,150.0,true,true
+ST456UV,Avianca,Boeing 747,true,20,600.0,true,true,30,400.0,true,true,80,200.0,true,true

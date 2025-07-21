@@ -1,0 +1,152 @@
+package ClasesSistemas.CargaDatos;
+import ClasesBase.Avion.*;
+import ClasesBase.Persona.*;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public final class SistemaCarga {
+
+    public static List<Administrador> cargarAdministradores(String archivo) throws IOException {
+        List<Administrador> administradores = new ArrayList<>();
+        List<String> lineas = Files.readAllLines(Paths.get(archivo));
+
+        for (String linea : lineas) {
+            String[] datos = linea.split(",");
+            Administrador admin = new Administrador(
+                    Integer.parseInt(datos[0]),
+                    datos[1],
+                    LocalDate.parse(datos[2]),
+                    datos[3],
+                    Integer.parseInt(datos[4]),
+                    LocalDate.parse(datos[5]),
+                    Double.parseDouble(datos[6]),
+                    datos[7],
+                    Boolean.parseBoolean(datos[8]),
+                    datos[9],
+                    datos[10]
+            );
+            administradores.add(admin);
+        }
+        return administradores;
+    }
+
+    public static List<Mantenimiento> cargarMantenimientos(String archivo) throws IOException {
+        List<Mantenimiento> mantenimientos = new ArrayList<>();
+        List<String> lineas = Files.readAllLines(Paths.get(archivo));
+
+        for (String linea : lineas) {
+            String[] datos = linea.split(",");
+            List<String> apodos = Arrays.asList(datos[10].split(";"));
+            Mantenimiento mantenimiento = new Mantenimiento(
+                    Integer.parseInt(datos[0]),
+                    datos[1],
+                    LocalDate.parse(datos[2]),
+                    datos[3],
+                    Integer.parseInt(datos[4]),
+                    LocalDate.parse(datos[5]),
+                    Double.parseDouble(datos[6]),
+                    datos[7],
+                    Boolean.parseBoolean(datos[8]),
+                    datos[9],
+                    apodos
+            );
+            mantenimientos.add(mantenimiento);
+        }
+        return mantenimientos;
+    }
+
+    public static List<Piloto> cargarPilotos(String archivo) throws IOException {
+        List<Piloto> pilotos = new ArrayList<>();
+        List<String> lineas = Files.readAllLines(Paths.get(archivo));
+
+        for (String linea : lineas) {
+            String[] datos = linea.split(",");
+            List<String> idiomas = Arrays.asList(datos[11].split(";"));
+            Piloto piloto = new Piloto(
+                    Integer.parseInt(datos[0]),
+                    datos[1],
+                    LocalDate.parse(datos[2]),
+                    datos[3],
+                    Integer.parseInt(datos[4]),
+                    LocalDate.parse(datos[5]),
+                    Double.parseDouble(datos[6]),
+                    datos[7],
+                    Boolean.parseBoolean(datos[8]),
+                    Integer.parseInt(datos[9]),
+                    Integer.parseInt(datos[10]),
+                    idiomas
+            );
+            pilotos.add(piloto);
+        }
+        return pilotos;
+    }
+
+    public static List<Tripulante> cargarTripulantes(String archivo) throws IOException {
+        List<Tripulante> tripulantes = new ArrayList<>();
+        List<String> lineas = Files.readAllLines(Paths.get(archivo));
+
+        for (String linea : lineas) {
+            String[] datos = linea.split(",");
+
+            // Cambiar las posiciones de "cargo", "idiomas" y "entrenamientos" según el formato actual
+            String cargo = datos[9];
+            List<String> idiomas = Arrays.asList(datos[10].replace("\"", "").split(";"));
+            List<String> entrenamientos = Arrays.asList(datos[11].replace("\"", "").split(";"));
+
+            Tripulante tripulante = new Tripulante(
+                    Integer.parseInt(datos[0]),
+                    datos[1],
+                    LocalDate.parse(datos[2]),
+                    datos[3],
+                    Integer.parseInt(datos[4]),
+                    LocalDate.parse(datos[5]),
+                    Double.parseDouble(datos[6]),
+                    datos[7],
+                    Boolean.parseBoolean(datos[8]),
+                    cargo,
+                    idiomas,
+                    entrenamientos
+            );
+
+            tripulantes.add(tripulante);
+        }
+        return tripulantes;
+    }
+
+
+    public static List<Avion> cargarAviones(String archivo) throws IOException {
+        List<Avion> aviones = new ArrayList<>();
+        List<String> lineas = Files.readAllLines(Paths.get(archivo));
+
+        for (String linea : lineas) {
+            String[] datos = linea.split(",");
+            Avion avion = new Avion(
+                    datos[0],
+                    datos[1],
+                    datos[2],
+                    Boolean.parseBoolean(datos[3]),
+                    Short.parseShort(datos[4]),
+                    Double.parseDouble(datos[5]),
+                    Boolean.parseBoolean(datos[6]),
+                    Boolean.parseBoolean(datos[7]),
+                    Short.parseShort(datos[8]),
+                    Double.parseDouble(datos[9]),
+                    Boolean.parseBoolean(datos[10]),
+                    Boolean.parseBoolean(datos[11]),
+                    Short.parseShort(datos[12]),
+                    Double.parseDouble(datos[13]),
+                    Boolean.parseBoolean(datos[14]),
+                    Boolean.parseBoolean(datos[15])
+            );
+            aviones.add(avion);
+        }
+        return aviones;
+    }
+}
+

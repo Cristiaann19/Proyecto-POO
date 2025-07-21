@@ -1,0 +1,268 @@
+package ClasesSistemas;
+
+import ClasesBase.Avion.*;
+import ClasesBase.Persona.*;
+import ClasesBase.Vuelo;
+import ClasesSistemas.CargaDatos.SistemaCarga;
+import ClasesSistemas.CargaDatos.cargaPasajeros;
+import ClasesSistemas.CargaDatos.cargaVuelos;
+import ClasesSistemas.GuardarDatos.guardarPasajerosVuelos;
+import ClasesSistemas.SubSistemas.SistemaAdministrador;
+import ClasesSistemas.SubSistemas.SistemaBoleto;
+import ClasesSistemas.SubSistemas.SistemaPasajero;
+import ClasesSistemas.SubSistemas.SistemaVuelo;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+
+public class SistemaAereopuerto {
+
+    public static void Ejecutable() throws IOException {
+        ArrayList<Administrador> administradores;
+        ArrayList<Mantenimiento> mantenimientos;
+        ArrayList<Tripulante> tripulantes;
+        ArrayList<Piloto> pilotos;
+        ArrayList<Avion> aviones;
+        ArrayList<Vuelo> vuelos;
+
+        administradores = (ArrayList<Administrador>) SistemaCarga.cargarAdministradores("Datos\\Administradores.txt");
+        mantenimientos = (ArrayList<Mantenimiento>) SistemaCarga.cargarMantenimientos("Datos\\Mantenimientos.txt");
+        pilotos = (ArrayList<Piloto>) SistemaCarga.cargarPilotos("Datos\\Pilotos.txt");
+        tripulantes = (ArrayList<Tripulante>) SistemaCarga.cargarTripulantes("Datos\\Tripulantes.txt");
+        aviones = (ArrayList<Avion>) SistemaCarga.cargarAviones("Datos\\Aviones.txt");
+        vuelos = (ArrayList<Vuelo>) cargaVuelos.cargarVuelos("Datos\\Vuelos.txt",aviones,pilotos,tripulantes);
+
+        SistemaAdministrador sistemaAdministrador = new SistemaAdministrador(administradores,mantenimientos,pilotos,tripulantes,vuelos);
+        SistemaVuelo sistemaVuelo = new SistemaVuelo(vuelos,aviones,pilotos,tripulantes);
+        SistemaBoleto sistemaBoleto = new SistemaBoleto(sistemaVuelo);
+        SistemaPasajero sistemaPasajero = new SistemaPasajero(sistemaVuelo,sistemaBoleto);
+
+        cargaPasajeros.cargarPasajeros("Datos\\Pasajeros.txt",sistemaPasajero);
+
+        Scanner Lector = new Scanner(System.in);
+
+        int opcion_ingresada1;
+        do{
+            Menu.Menutipo();
+            opcion_ingresada1 = Validaciones.validar_opciones(1, 3);
+            switch (opcion_ingresada1) {
+                case 1 :
+                    int opcion_MenuCliente ;
+                    do {
+                        Menu.MenuCliente();
+                        opcion_MenuCliente = Validaciones.validar_opciones(1, 5);
+                        switch (opcion_MenuCliente) {
+                            case 1:
+                                int opcion_MenuVuelos ;
+                                do {
+                                    Menu.SubMenuVuelos();
+                                    opcion_MenuVuelos = Validaciones.validar_opciones(1, 3);
+                                    switch (opcion_MenuVuelos) {
+                                        case 1:
+                                            sistemaVuelo.IngresarDatosVuelo();
+                                            sistemaVuelo.BuscarVuelosDisponibles();
+                                            break;
+                                        case 2:
+                                            sistemaVuelo.Listar();
+                                            break;
+                                        case 3:
+                                            break;
+                                    }
+                                }while (opcion_MenuVuelos != 3);
+                                break;
+                            case 2:
+                                sistemaVuelo.Listar();
+                                sistemaVuelo.seleccionarVuelo();
+                                sistemaPasajero.Registrar(sistemaVuelo.getIndex_elegido());
+                                break;
+                            case 3:
+                                int opcion_MenuBoleto;
+                                int vuelo;
+                                int dni;
+                                do {
+                                    Menu.subMenuBoleto();
+                                    opcion_MenuBoleto = Validaciones.validar_opciones(1, 4);
+                                    switch (opcion_MenuBoleto) {
+                                        case 1:
+                                            vuelo = Validaciones.validar_Vuelo(1, sistemaVuelo.getVuelos().size());
+                                            dni = Validaciones.validarDNI(Lector);
+                                            sistemaBoleto.estadoBoleto(vuelo, dni);
+                                            break;
+                                        case 2:
+                                            vuelo = Validaciones.validar_Vuelo(1, sistemaVuelo.getVuelos().size());
+                                            dni = Validaciones.validarDNI(Lector);
+                                            sistemaPasajero.realizar_pago(vuelo-1, dni);
+                                            break;
+                                        case 3:
+                                            vuelo = Validaciones.validar_Vuelo(1, sistemaVuelo.getVuelos().size());
+                                            dni = Validaciones.validarDNI(Lector);
+                                            sistemaBoleto.imprimirBoletos(vuelo, dni);
+                                            break;
+                                        case 4:
+                                            break;
+                                    }
+                                }while (opcion_MenuBoleto != 4);
+                                break;
+                            case 4:
+                                vuelo = Validaciones.validar_Vuelo(1, sistemaVuelo.getVuelos().size());
+                                sistemaPasajero.Modificar(vuelo);
+                                break;
+                            case 5:
+                                break;
+                        }
+                    }while (opcion_MenuCliente != 5);
+                    break;
+                case 2 :
+                    sistemaAdministrador.inicioSesion();
+                    if (sistemaAdministrador.getIngreso()) {
+                        int opcionMenuEncargado ;
+                        do {
+                            Menu.MenuEncargado();
+                            opcionMenuEncargado = Validaciones.validar_opciones(1, 5);
+                            switch (opcionMenuEncargado) {
+                                case 1:
+                                    int opcion_MenuGesVuelos;
+                                    do {
+                                        Menu.MenuGesVuelos();
+                                        opcion_MenuGesVuelos = Validaciones.validar_opciones(1, 5);
+                                        switch (opcion_MenuGesVuelos) {
+                                            case 1:
+                                                sistemaVuelo.Listar();
+                                                break;
+                                            case 2:
+                                                sistemaVuelo.Registrar();
+                                                break;
+                                            case 3:
+                                                int vuelo = Validaciones.validar_Vuelo(1, sistemaVuelo.getVuelos().size());
+                                                sistemaVuelo.Modificar(vuelo);
+                                                break;
+                                            case 4:
+                                                vuelo = Validaciones.validar_Vuelo(1, sistemaVuelo.getVuelos().size());
+                                                sistemaVuelo.Eliminar(vuelo);
+                                                break;
+                                            case 5:
+                                                break;
+                                        }
+                                    }while (opcion_MenuGesVuelos != 5);
+                                    break;
+                                case 2:
+                                    int opcion_MenuGesBoletos ;
+                                    do {
+                                        Menu.MenuGesBoletos();
+                                        opcion_MenuGesBoletos = Validaciones.validar_opciones(1, 2);
+                                        switch (opcion_MenuGesBoletos) {
+                                            case 1:
+                                                int vuelo = Validaciones.validar_Vuelo(1, sistemaVuelo.getVuelos().size());
+                                                sistemaBoleto.ListaBoletosVuelo(vuelo);
+                                                break;
+                                            case 2:
+                                                break;
+                                        }
+                                    }while (opcion_MenuGesBoletos != 2);
+                                    break;
+                                case 3:
+                                    int opcion_MenuGesPasajeros;
+                                    do {
+                                        Menu.MenuGesPasajeros();
+                                        opcion_MenuGesPasajeros = Validaciones.validar_opciones(1, 2);
+                                        switch (opcion_MenuGesPasajeros) {
+                                            case 1:
+                                                int vuelo = Validaciones.validar_Vuelo(1, sistemaVuelo.getVuelos().size());
+                                                sistemaPasajero.Eliminar(vuelo);
+                                                break;
+                                            case 2:
+                                                break;
+                                        }
+                                    }while (opcion_MenuGesPasajeros != 2);
+                                    break;
+                                case 4:
+                                    int opcion_MenuReportes;
+                                    do {
+                                        Menu.MenuReportes();
+                                        opcion_MenuReportes = Validaciones.validar_opciones(1, 5);
+                                        switch (opcion_MenuReportes) {
+                                            case 1:
+                                                sistemaAdministrador.reporteVuelos();
+                                                break;
+                                            case 2:
+                                                sistemaAdministrador.reportePasajeroVuelo();
+                                                break;
+                                            case 3:
+                                                int opcion_MenuReportesVentas ;
+                                                do {
+                                                    Menu.MenuReportesVentas();
+                                                    opcion_MenuReportesVentas = Validaciones.validar_opciones(1, 4);
+                                                    switch (opcion_MenuReportesVentas) {
+                                                        case 1:
+                                                            sistemaAdministrador.reporteVentasDia();
+                                                            break;
+                                                        case 2:
+                                                            sistemaAdministrador.reporteVentasMes();
+                                                            break;
+                                                        case 3:
+                                                            sistemaAdministrador.reporteVentasAnual();
+                                                            break;
+                                                        case 4:
+                                                            break;
+                                                    }
+                                                }while (opcion_MenuReportesVentas != 4);
+                                                break;
+                                            case 4:
+                                                int opcion_MenuReportesEmpleados ;
+                                                do {
+                                                    Menu.MenuReportesEmpleados();
+                                                    opcion_MenuReportesEmpleados = Validaciones.validar_opciones(1, 5);
+                                                    switch (opcion_MenuReportesEmpleados) {
+                                                        case 1:
+                                                            sistemaAdministrador.reporteEmpleadosActivos();
+                                                            break;
+                                                        case 2:
+                                                            sistemaAdministrador.reporteEmpleadosDistribucionAntiguedad();
+                                                            break;
+                                                        case 3:
+                                                            sistemaAdministrador.reporteEmpleadosSalario();
+                                                            break;
+                                                        case 4:
+                                                            sistemaAdministrador.reporteEmpleadosEdad();
+                                                            break;
+                                                        case 5:
+                                                            break;
+                                                    }
+                                                }while (opcion_MenuReportesEmpleados != 5);
+                                                break;
+                                            case 5:
+                                                break;
+                                        }
+                                    }while (opcion_MenuReportes != 5);
+                                    break;
+                                case 5:
+                                    break;
+                            }
+                        }while (opcionMenuEncargado != 5);
+                    }
+                    break;
+                case 3 :
+                    System.out.println("CERRANDO EL SISTEMA");
+                    // Guardar los vuelos en el archivo correspondiente
+                    try {
+                        // Llamamos a la función para guardar vuelos
+                        guardarPasajerosVuelos.guardarVuelos("Datos\\Vuelos.txt", sistemaVuelo.getVuelos());  // Nombre del archivo de vuelos
+                        System.out.println("Vuelos guardados correctamente.");
+
+                        // Llamamos a la función para guardar pasajeros
+                        guardarPasajerosVuelos.guardarPasajeros("Datos\\Pasajeros.txt",(ArrayList<Vuelo>) sistemaVuelo.getVuelos());  // Nombre del archivo de pasajeros
+                        System.out.println("Pasajeros guardados correctamente.");
+
+                    } catch (IOException e) {
+                        System.err.println("Error al guardar los datos: " + e.getMessage());
+                    }
+
+                    // Finalizar el programa o hacer cualquier limpieza adicional si es necesario
+                    System.out.println("SISTEMA CERRADO CORRECTAMENTE");
+                    break;
+            }
+        }while (opcion_ingresada1 != 3);
+    }
+}

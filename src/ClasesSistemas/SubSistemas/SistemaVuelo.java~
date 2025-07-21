@@ -1,0 +1,261 @@
+package ClasesSistemas.SubSistemas;
+
+import ClasesBase.Avion.Avion;
+import ClasesBase.Avion.Seccion;
+import ClasesBase.Persona.Piloto;
+import ClasesBase.Persona.Tripulante;
+import ClasesBase.Vuelo;
+import ClasesSistemas.Validaciones;
+import ClasesSistemas.iCRUDSistemas;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class    SistemaVuelo implements iCRUDSistemas {
+    private final Scanner Lector = new Scanner(System.in);
+    private final List<Vuelo> Vuelos;
+    private final List<Avion> Aviones;
+    private final List<Piloto> Pilotos;
+    private final List<Tripulante> Tripulantes;
+    private final DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private String Origen_Ingresado;
+    private String Destino_Ingresado;
+    private LocalDate Fecha_Ingresada;
+    private int index_elegido=0;
+    private int index_elegido2_seccion=0;
+
+    public SistemaVuelo() {
+        Vuelos = new ArrayList<>();
+        Aviones = new ArrayList<>();
+        Pilotos = new ArrayList<>();
+        Tripulantes = new ArrayList<>();
+    }
+
+    public SistemaVuelo(List<Vuelo> vuelos, List<Avion> aviones, List<Piloto> pilotos, List<Tripulante> tripulantes) {
+        Vuelos = vuelos;
+        Aviones = aviones;
+        Pilotos = pilotos;
+        Tripulantes = tripulantes;
+    }
+
+    public List<Vuelo> getVuelos() {
+        return Vuelos;
+    }
+
+    public int getIndex_elegido() {
+        return index_elegido;
+    }
+
+    public Vuelo vueloelegido(int index) {
+        return Vuelos.get(index);
+    }
+
+    public Seccion getSeccionElegida() {
+        return Vuelos.get(index_elegido).getAvion().getSecciones().get(index_elegido2_seccion); //Cambio realizado en (index_elegido-1) otro cambio realizado en index_elegido2_seccion-1
+    }
+
+    public void setInidice_elegido2_seccion(int index) {
+        this.index_elegido2_seccion = index;
+    }
+
+    public int getIndex_elegido2_seccion() {
+        return index_elegido2_seccion;
+    }
+
+    public void IngresarDatosVuelo(){
+        System.out.print("""
+                ----------------------------
+                  INGRESAR DATOS DEL VUELO
+                ----------------------------
+                Origen:""");
+        this.Origen_Ingresado = Validaciones.validar_textos(Lector);
+        System.out.print("""
+                Destino:""");
+        this.Destino_Ingresado = Validaciones.validar_textos(Lector);
+        System.out.print("""
+                Fecha:""");
+        this.Fecha_Ingresada = Validaciones.validar_fecha(Lector, formato);
+        System.out.print("""
+                ----------------------------""");
+    }
+
+    public void BuscarVuelosDisponibles(){
+        System.out.print("""
+                ------------------------------------
+                        VUELOS DISPONIBLES
+                ------------------------------------
+                """);
+        for (Vuelo vuelo : Vuelos) {
+            if (vuelo.getOrigen().equals(this.Origen_Ingresado) && vuelo.getDestino().equals(this.Destino_Ingresado) && vuelo.getFecha().equals(this.Fecha_Ingresada)){
+                System.out.println(vuelo);
+            }
+        }
+    }
+
+    public void seleccionarVuelo(){
+        System.out.print("""
+                ------------------------------------
+                Selecione un vuelo:
+                """);
+        this.index_elegido = Validaciones.validar_entero(1, Vuelos.size())-1; // cambio realizado en -1
+        System.out.print("""
+                ------------------------------------
+                ------------------------------------
+                Primer Clase[1]
+                Clase Ejecutiva[2]
+                Clase Económica[3]
+                Selecione una sección:
+                """);
+        this.index_elegido2_seccion = Validaciones.validar_entero(1, 3)-1; //cambio realizado en -1
+        System.out.print("""
+                ------------------------------------
+                """);
+
+    }
+
+    @Override
+    public void Listar() {
+        System.out.print("""
+                ------------------------------------
+                          LISTA DE VUELOS
+                ------------------------------------
+                """);
+        int contador = 1;
+        for (Vuelo vuelo : Vuelos) {
+            System.out.println(contador+". " + vuelo);
+            contador++;
+        }
+    }
+
+    @Override
+    public void Registrar() {
+        System.out.print("""
+                ------------------------------------
+                           REGISTRAR VUELO
+                ------------------------------------
+                """);
+        System.out.print("""
+                Origen:""");
+        String origen = Validaciones.validar_textos(Lector);
+        System.out.print("""
+                Destino:""");
+        String destino = Validaciones.validar_textos(Lector);
+        System.out.print("""
+                Fecha:""");
+        LocalDate fecha = Validaciones.validar_fecha(Lector, formato);
+        System.out.print("""
+                ------------------------------------
+                          LISTA DE AVIONES
+                ------------------------------------
+                """);
+        int contador = 1;
+        for (Avion avion : Aviones) {
+            System.out.println(contador + ". " + avion.toString());
+            contador++;
+        }
+
+        boolean pasa = false;
+        int index0;
+        do {
+            System.out.print("""
+                ------------------------------------
+                          ELEGIR AVION
+                ------------------------------------
+                """);
+            index0 = Validaciones.validar_entero(1, Aviones.size())-1;
+            Avion avion = Aviones.get(index0);
+            if (avion.getEstado()) {
+                pasa = true;
+            }else {
+                System.out.println("El avion no esta disponible");
+            }
+        }while (!pasa);
+        Avion avion = Aviones.get(index0);
+        System.out.print("""
+                ------------------------------------
+                          LISTA DE PILOTOS
+                ------------------------------------
+                """);
+        for (Piloto piloto : Pilotos) {
+            System.out.println(piloto);
+        }
+
+        int contador2 = 0;
+        List<Piloto> pilotosVuelo = new ArrayList<>();
+        do {
+            System.out.print("""
+                ------------------------------------
+                          ELEGIR PILOTOS
+                ------------------------------------
+                """);
+            int index2 = Validaciones.validar_entero(1, Pilotos.size());
+            pilotosVuelo.add(Pilotos.get(index2-1));
+            contador2++;
+        }while (contador2<2);
+        int contador3=1;
+        System.out.print("""
+                ------------------------------------
+                        LISTA DE TRIPULANTES
+                ------------------------------------
+                """);
+        for (Tripulante tripulante : Tripulantes) {
+            System.out.println((contador3++)+". "+tripulante);
+        }
+
+        int contador4 = 0;
+        List<Tripulante> tripulantesVuelo = new ArrayList<>();
+        do {
+            System.out.print("""
+                ------------------------------------
+                          ELEGIR TRIPULANTES
+                ------------------------------------
+                """);
+            int index3 = Validaciones.validar_entero(1, Tripulantes.size());
+            tripulantesVuelo.add(Tripulantes.get(index3-1));
+            contador4++;
+        }while (contador4<4);
+
+        Vuelo vuelo = new Vuelo(origen,destino,fecha,avion,pilotosVuelo,tripulantesVuelo);
+        Vuelos.add(vuelo);
+    }
+
+    @Override
+    public void Modificar(int indice) {
+        indice= indice-1;
+        System.out.print("¿Desea modificar el vuelo (Origen,Destino,Fecha)? / Salir(Salir)");
+        String respuesta = Validaciones.validar_textos(Lector);
+        switch (respuesta) {
+            case "Origen" :
+                System.out.print("""
+                        Origen:""");
+                String origen = Validaciones.validar_textos(Lector);
+                Vuelos.get(indice).setOrigen(origen);
+                break;
+            case "Destino" :
+                System.out.print("""
+                        Destino:""");
+                String destino = Validaciones.validar_textos(Lector);
+                Vuelos.get(indice).setDestino(destino);
+                break;
+            case "Fecha" :
+                System.out.print("""
+                        Fecha:""");
+                LocalDate fecha = Validaciones.validar_fecha(Lector, formato);
+                Vuelos.get(indice).setFecha(fecha);
+                break;
+            case "Salir" :
+                break;
+        }
+    }
+
+    @Override
+    public void Eliminar(int indice) {
+        indice= indice-1;
+        Vuelos.remove(indice);
+        System.out.println("VUELO ELIMINADO");
+    }
+
+}

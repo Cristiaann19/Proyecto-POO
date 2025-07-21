@@ -1,0 +1,552 @@
+package ClasesSistemas.SubSistemas;
+
+import ClasesBase.Boleto;
+import ClasesBase.Persona.*;
+import ClasesBase.Vuelo;
+import ClasesSistemas.Validaciones;
+import ClasesSistemas.iCRUDSistemas;
+import ClasesSistemas.iReporte;
+
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class SistemaAdministrador {
+    private final Scanner lector = new Scanner(System.in);
+    private ArrayList<Administrador> administradores;
+    private ArrayList<Mantenimiento> mantenimientos;
+    private ArrayList<Piloto> pilotos;
+    private ArrayList<Tripulante> tripulantes;
+    private ArrayList<Vuelo> vuelos;
+    private Boolean ingreso = false;
+
+    public SistemaAdministrador(ArrayList<Administrador> administradores, ArrayList<Mantenimiento> mantenimientos, ArrayList<Piloto> pilotos, ArrayList<Tripulante> tripulantes, ArrayList<Vuelo> vuelos) {
+        this.administradores = administradores;
+        this.mantenimientos = mantenimientos;
+        this.pilotos = pilotos;
+        this.tripulantes = tripulantes;
+        this.vuelos = vuelos;
+    }
+
+    public Boolean getIngreso() {
+        return ingreso;
+    }
+
+    public void setIngreso(Boolean ingreso) {
+        this.ingreso = ingreso;
+    }
+
+    public void inicioSesion(){
+        boolean ingresoCorrecto = false;
+        String Usuario, Contrasena;
+
+        System.out.print("""
+                    ------------------------------------
+                              INICIO DE SESIÓN
+                    ------------------------------------
+                    """);
+        System.out.print("Usuario: ");
+        Usuario = lector.nextLine().trim();
+        System.out.print("Contraseña: ");
+        Contrasena = lector.nextLine().trim();
+        System.out.print("""
+                    ------------------------------------
+                    """);
+        this.ingreso = false;
+        for (Administrador administrador : this.administradores) {
+            if (administrador.getUsuario().equals(Usuario) && administrador.getContrasena().equals(Contrasena)) {
+                System.out.println("Ingreso Correcto");
+                System.out.print("""
+                        ------------------------------------
+                        """);
+                System.out.println("BIENVENIDO " + administrador.getNombre());
+                System.out.print("""
+                        ------------------------------------
+                        """);
+                ingresoCorrecto = true;
+                this.ingreso = true;
+                break;
+            }
+        }
+        if (!ingresoCorrecto) {
+            System.out.println("Usuario o Contraseña Incorrectos");
+        }
+    }
+
+    iReporte reporteEmpleadosActivos = () -> {
+        System.out.print("""
+                ------------------------------------
+                    REPORTE DE EMPLEADOS ACTIVOS
+                ------------------------------------
+                PILOTOS
+                ------------------------------------
+                """);
+        int cont1 = 0;
+        for (Piloto piloto : this.pilotos) {
+            if (piloto.getEstado()) {
+                cont1++;
+            }
+        }
+        System.out.printf("""
+                ------------------------------------
+                PILOTOS ACTIVOS: %d
+                PILOTOS INACTIVOS: %d
+                ------------------------------------
+                """,cont1,pilotos.size()-cont1);
+
+        System.out.print("""
+                ------------------------------------
+                TRIPULANTES
+                ------------------------------------
+                """);
+        int cont2 = 0;
+        for (Tripulante tripulante : this.tripulantes) {
+            if (tripulante.getEstado()) {
+                cont2++;
+            }
+        }
+        System.out.printf("""
+                ------------------------------------
+                TRIPULANTES ACTIVOS: %d
+                TRIPULANTES INACTIVOS: %d
+                ------------------------------------
+                """,cont2,tripulantes.size()-cont2);
+
+        System.out.print("""
+                ------------------------------------
+                MANTENIMIENTOS
+                ------------------------------------
+                """);
+        int cont3 = 0;
+        for (Mantenimiento mantenimiento : this.mantenimientos) {
+            if (mantenimiento.getEstado()) {
+                cont3++;
+            }
+        }
+        System.out.printf("""
+                ------------------------------------
+                MANTENIMIENTOS ACTIVOS: %d
+                MANTENIMIENTOS INACTIVOS: %d
+                ------------------------------------
+                """,cont3,mantenimientos.size()-cont3);
+
+        System.out.print("""
+                ------------------------------------
+                ADMINISTRADORES
+                ------------------------------------
+                """);
+        int cont4 = 0;
+        for (Administrador administrador : this.administradores) {
+            if (administrador.getEstado()) {
+                cont4++;
+            }
+        }
+        int activos = cont1+cont2+cont3+cont4;
+        int inactivos = (pilotos.size()-cont1)+(tripulantes.size()-cont2)+(mantenimientos.size()-cont3)+(administradores.size()-cont4);
+        System.out.printf("""
+                ------------------------------------
+                ADMINISTRADORES ACTIVOS: %d
+                ADMINISTRADORES INACTIVOS: %d
+                ------------------------------------
+                TOTAL EMPLEADOS ACTIVOS: %d
+                TOTAL EMPLEADOS INACTIVOS: %d
+                ------------------------------------
+                """,cont4,administradores.size()-cont4,activos,inactivos);
+
+    };
+
+    iReporte reporteEmpleadosDistribucionAntiguedad = () -> {
+        int totalEmpleados = this.pilotos.size()+this.mantenimientos.size()+this.administradores.size()+this.tripulantes.size();
+        int mas10=0, entre5y10=0, menos5=0;
+
+        for (Piloto piloto : this.pilotos) {
+            int antiguedad = Period.between(piloto.getFechaContratacion(), LocalDate.now()).getYears();
+            if (antiguedad>=10) {
+                mas10++;
+            }else if (antiguedad>5) {
+                entre5y10++;
+            }else {
+                menos5++;
+            }
+        }
+
+        for (Tripulante tripulante : this.tripulantes) {
+            int antiguedad = Period.between(tripulante.getFechaContratacion(), LocalDate.now()).getYears();
+            if (antiguedad>=10) {
+                mas10++;
+            }else if (antiguedad>5 ) {
+                entre5y10++;
+            }else {
+                menos5++;
+            }
+        }
+
+        for (Mantenimiento mantenimiento : this.mantenimientos) {
+            int antiguedad = Period.between(mantenimiento.getFechaContratacion(), LocalDate.now()).getYears();
+            if (antiguedad>=10) {
+                mas10++;
+            }else if (antiguedad>5) {
+                entre5y10++;
+            }else {
+                menos5++;
+            }
+        }
+
+        for (Administrador administrador : this.administradores) {
+            int antiguedad = Period.between(administrador.getFechaContratacion(), LocalDate.now()).getYears();
+            if (antiguedad>=10) {
+                mas10++;}else if (antiguedad>5) {
+                entre5y10++;
+            }else {
+                menos5++;
+            }
+        }
+
+        float porcentajeMas10 = (float) (mas10 * 100) /totalEmpleados;
+        float porcentajeEntre5y10 = (float) (entre5y10 * 100) /totalEmpleados;
+        float porcentajeMenos5 = (float) (menos5 * 100) /totalEmpleados;
+
+
+        System.out.printf("""
+                ------------------------------------------
+                 DISTRIBUCIÓN DE EMPLEADOS POR ANTIGÜEDAD
+                ------------------------------------------
+                EMPLEADOS MAS DE 10 AÑOS:    %4d [%3.1f%%]
+                EMPLEADOS ENTRE 5 Y 10 AÑOS: %4d [%3.1f%%]
+                EMPLEADOS MENOS DE 5 AÑOS:   %4d [%3.1f%%]
+                TOTAL EMPLEADOS: %d
+                ------------------------------------------
+                """,mas10,porcentajeMas10,entre5y10,porcentajeEntre5y10,menos5,porcentajeMenos5,totalEmpleados);
+
+    };
+
+    iReporte reporteEmpleadosSalario = () -> {
+        int totalEmpleados = this.pilotos.size()+this.mantenimientos.size()+this.administradores.size()+this.tripulantes.size();
+        double promedioGeneral = 0;
+        double salarioMasAlto = 0;
+        double salarioMasBajo = 100000;
+        for (Piloto piloto : this.pilotos) {
+            promedioGeneral += piloto.getSalario();
+            if (piloto.getSalario()>salarioMasAlto) {
+                salarioMasAlto = piloto.getSalario();
+            }
+            if (piloto.getSalario()<salarioMasBajo) {
+                salarioMasBajo = piloto.getSalario();
+            }
+        }
+        for (Tripulante tripulante : this.tripulantes) {
+            promedioGeneral += tripulante.getSalario();
+            if (tripulante.getSalario()>salarioMasAlto) {
+                salarioMasAlto = tripulante.getSalario();
+            }
+            if (tripulante.getSalario()<salarioMasBajo) {
+                salarioMasBajo = tripulante.getSalario();
+            }
+        }
+        for (Mantenimiento mantenimiento : this.mantenimientos) {
+            promedioGeneral += mantenimiento.getSalario();
+            if (mantenimiento.getSalario()>salarioMasAlto) {
+                salarioMasAlto = mantenimiento.getSalario();
+            }
+            if (mantenimiento.getSalario()<salarioMasBajo) {
+                salarioMasBajo = mantenimiento.getSalario();
+            }
+        }
+        for (Administrador administrador : this.administradores) {
+            promedioGeneral += administrador.getSalario();
+            if (administrador.getSalario()>salarioMasAlto) {
+                salarioMasAlto = administrador.getSalario();
+            }
+            if (administrador.getSalario()<salarioMasBajo) {
+                salarioMasBajo = administrador.getSalario();
+            }
+        }
+
+        promedioGeneral /= totalEmpleados;
+
+        System.out.printf("""
+                ------------------------------------------
+                  DISTRIBUCIÓN DE EMPLEADOS POR SALARIO
+                ------------------------------------------
+                TOTAL EMPLEADOS: %d
+                PROMEDIO GENERAL: %.2f
+                SALARIO MÁS ALTO: %.2f
+                SALARIO MÁS BAJO: %.2f
+                ------------------------------------------
+                """,totalEmpleados,promedioGeneral,salarioMasAlto,salarioMasBajo);
+    };
+
+    iReporte reporteEmpleadosEdad = () -> {
+        int totalEmpleados = this.pilotos.size()+this.mantenimientos.size()+this.administradores.size()+this.tripulantes.size();
+        double promedioGeneral = 0;
+        int promedioMenores30 = 0;
+        int promedioEntre30y50 = 0;
+        int promedioMayores50 = 0;
+        for (Piloto piloto : this.pilotos) {
+            promedioGeneral += Period.between(piloto.getFechaNacimiento(), LocalDate.now()).getYears();
+            if (Period.between(piloto.getFechaNacimiento(), LocalDate.now()).getYears() < 30) {
+                promedioMenores30++;
+            }else if (Period.between(piloto.getFechaNacimiento(), LocalDate.now()).getYears() > 30 && Period.between(piloto.getFechaNacimiento(), LocalDate.now()).getYears() < 50) {
+                promedioEntre30y50 ++;
+            }else {
+                promedioMayores50 ++;
+            }
+        }
+        for (Tripulante tripulante : this.tripulantes) {
+            promedioGeneral += Period.between(tripulante.getFechaNacimiento(), LocalDate.now()).getYears();
+            if (Period.between(tripulante.getFechaNacimiento(), LocalDate.now()).getYears() < 30) {
+                promedioMenores30 ++;
+            }else if (Period.between(tripulante.getFechaNacimiento(), LocalDate.now()).getYears() > 30 && Period.between(tripulante.getFechaNacimiento(), LocalDate.now()).getYears() < 50) {
+                promedioEntre30y50 ++;
+            }else {
+                promedioMayores50 ++;
+            }
+        }
+        for (Mantenimiento mantenimiento : this.mantenimientos) {
+            promedioGeneral += Period.between(mantenimiento.getFechaNacimiento(), LocalDate.now()).getYears();
+            if (Period.between(mantenimiento.getFechaNacimiento(), LocalDate.now()).getYears() < 30) {
+                promedioMenores30 ++;
+            }else if (Period.between(mantenimiento.getFechaNacimiento(), LocalDate.now()).getYears() > 30 && Period.between(mantenimiento.getFechaNacimiento(), LocalDate.now()).getYears() < 50) {
+                promedioEntre30y50 ++;
+            }else {
+                promedioMayores50 ++;
+            }
+        }
+        for (Administrador administrador : this.administradores) {
+            promedioGeneral += Period.between(administrador.getFechaNacimiento(), LocalDate.now()).getYears();
+            if (Period.between(administrador.getFechaNacimiento(), LocalDate.now()).getYears() < 30) {
+                promedioMenores30 ++;
+            }else if (Period.between(administrador.getFechaNacimiento(), LocalDate.now()).getYears() > 30 && Period.between(administrador.getFechaNacimiento(), LocalDate.now()).getYears() < 50) {
+                promedioEntre30y50 ++;
+            }else {
+                promedioMayores50 ++;
+            }
+        }
+        promedioGeneral /= totalEmpleados;
+
+        System.out.printf("""
+                ------------------------------------------
+                    DISTRIBUCIÓN DE EMPLEADOS POR EDAD
+                ------------------------------------------
+                PROMEDIO GENERAL: %.2f
+                MENORES DE 30 AÑOS: %d
+                ENTRE 30 Y 50 AÑOS: %d
+                MAYORES DE 50 AÑOS: %d
+                ------------------------------------------
+                """, promedioGeneral, promedioMenores30, promedioEntre30y50, promedioMayores50);
+    };
+
+    iReporte reporteVuelos = () -> {
+        System.out.print("""
+                ------------------------------------------------------------------
+                                       REPORTES DE VUELOS
+                ------------------------------------------------------------------
+                 INDICE    ORIGEN         DESTINO        FECHA          CAPACIDAD
+                """);
+        for (int i = 0; i < vuelos.size(); i++) {
+            System.out.printf("""
+                 %-9d %-14s %-14s %-14s %-9d
+                """,i+1,vuelos.get(i).getOrigen(),vuelos.get(i).getDestino(),vuelos.get(i).getFecha().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),vuelos.get(i).getAvion().getCapacidadTotal());
+        }
+        System.out.print("""
+                ------------------------------------------------------------------
+                """);
+    };
+
+    iReporte reportePasajeroVuelo = () -> {
+        int vuelo = 0;
+        if (!vuelos.isEmpty()) {
+            System.out.println("INGRESE EL VUELO: ");
+            vuelo = Validaciones.validar_entero(1, vuelos.size())-1;
+            System.out.printf("""
+                -------------------------------------------------------------------------------------------------------
+                                                  REPORTES DE PASAJEROS : VUELO %d
+                -------------------------------------------------------------------------------------------------------
+                DNI       |NOMBRE              |FECHA DE NACIMIENTO |EMAIL                   |TELEFONO  |NACIONALIDAD
+                -------------------------------------------------------------------------------------------------------
+                """,vuelo+1);
+            for (Pasajero pasajero : vuelos.get(vuelo).getPasajeros()) {
+                System.out.printf("""
+                %-10d|%-20s|%-20.20s|%-24.24s|%-10d|%-15s
+                """,pasajero.getDni(),pasajero.getNombre(),pasajero.getFechaNacimiento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),pasajero.getEmail(),pasajero.getTelefono(),pasajero.getNacionalidad());
+            }
+            System.out.print("""
+                -------------------------------------------------------------------------------------------------------
+                """);
+        }else {
+            System.out.print("""
+                ---------------------------
+                 NO HAY VUELOS REGISTRADOS
+                ---------------------------
+                """);
+        }
+    };
+
+    iReporte reporteVentasDia = () -> {
+        LocalDate fecha = Validaciones.validar_fecha_cualquiera(lector, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        int totalBoletos=0;
+        double totalRecaudado=0.0;
+        System.out.printf("""
+                --------------------------------------------------------------------------------------
+                                           REPORTES DE VENTAS [%-10.10s]
+                --------------------------------------------------------------------------------------
+                 VUELO       |CAPACIDAD   |TOTAL BOLETOS   |TOTAL BOLETOS VENDIDOS   |TOTAL VENTAS
+                --------------------------------------------------------------------------------------
+                """,fecha.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        int contador = 1;
+        for (Vuelo vuelo : this.vuelos) {
+            if (vuelo.getFecha().equals(fecha)) {
+                int BVendidos = vuelo.getBoletos().size();
+                int BPagados = 0;
+                double Ventas = 0.0;
+                for (Boleto boleto : vuelo.getBoletos()) {
+                    if (boleto.isEstado()) {
+                        BPagados++;
+                        Ventas += boleto.getPrecio();
+                    }
+                }
+                contador++;
+                System.out.printf("""
+                                 %-12d|%-12d|%-16d|%-25d|%-14.2f
+                                """,contador,vuelo.getAvion().getCapacidadTotal(),BVendidos,BPagados,Ventas);
+            totalBoletos += BVendidos;
+            totalRecaudado += Ventas;
+            }
+        }
+        System.out.printf("""
+                --------------------------------------------------------------------------------------
+                    TOTAL BOLETOS : %-10d
+                --------------------------------------------------------------------------------------
+                    TOTAL RECAUDADO: %-10.2f
+                --------------------------------------------------------------------------------------
+                """,totalBoletos,totalRecaudado);
+
+    };
+
+    iReporte reporteVentasMes = () -> {
+        System.out.println("Ingrese el Mes: ");
+        int mes = Validaciones.validar_entero(1, 12);
+        System.out.println("Ingrese el Año: ");
+        int anio = Validaciones.validar_entero(2020, 2024);
+        LocalDate fechainicio = LocalDate.of(anio, mes, 1);
+        int totalBoletos=0;
+        double totalRecaudado=0;
+
+        System.out.printf("""
+                --------------------------------------------------------------------------------------
+                                        REPORTES DE VENTAS [%-14.14s]
+                --------------------------------------------------------------------------------------
+                 VUELO       |CAPACIDAD   |TOTAL BOLETOS   |TOTAL BOLETOS VENDIDOS   |TOTAL VENTAS
+                --------------------------------------------------------------------------------------
+                """,fechainicio.getMonth()+" "+anio);
+        int contador = 0;
+        for (Vuelo vuelo : this.vuelos) {
+            if (vuelo.getFecha().getMonth().getValue() == mes && vuelo.getFecha().getYear() == anio) {
+                int BVendidos = vuelo.getBoletos().size();
+                int BPagados = 0;
+                double Ventas = 0.0;
+                for (Boleto boleto : vuelo.getBoletos()) {
+                    if (boleto.isEstado()) {
+                        BPagados++;
+                        Ventas += boleto.getPrecio();
+                    }
+                }
+                contador++;
+                System.out.printf("""
+                                 %-12d|%-12d|%-16d|%-25d|%-14.2f
+                                """,contador,vuelo.getAvion().getCapacidadTotal(),BVendidos,BPagados,Ventas);
+                totalBoletos += BVendidos;
+                totalRecaudado += Ventas;
+            }
+        }
+        System.out.printf("""
+                --------------------------------------------------------------------------------------
+                    TOTAL BOLETOS : %-10d
+                --------------------------------------------------------------------------------------
+                    TOTAL RECAUDADO: %-10.2f
+                --------------------------------------------------------------------------------------
+                """,totalBoletos,totalRecaudado);
+    };
+
+    iReporte reporteVentasAnual = () -> {
+        System.out.println("Ingrese el Año: ");
+        int anio = Validaciones.validar_entero(2020, 2024);
+        LocalDate fechainicio = LocalDate.of(anio, 1, 1);
+        LocalDate fechafin = LocalDate.of(anio, 12, 31);
+        int totalBoletos = 0;
+        double totalRecaudado = 0;
+        System.out.printf("""
+                --------------------------------------------------------------------------------------
+                                           REPORTES DE VENTAS [%-4.4s]
+                --------------------------------------------------------------------------------------
+                 VUELO       |CAPACIDAD   |TOTAL BOLETOS   |TOTAL BOLETOS VENDIDOS   |TOTAL VENTAS
+                --------------------------------------------------------------------------------------
+                """,anio);
+        int contador = 0;
+        for (Vuelo vuelo : this.vuelos) {
+            if (vuelo.getFecha().getYear() == anio) {
+                int BVendidos = vuelo.getBoletos().size();
+                int BPagados = 0;
+                double Ventas = 0.0;
+                for (Boleto boleto : vuelo.getBoletos()) {
+                    if (boleto.isEstado()) {
+                        BPagados++;
+                        Ventas += boleto.getPrecio();
+                    }
+                }
+                contador++;
+                System.out.printf("""
+                                 %-12d|%-12d|%-16d|%-25d|%-14.2f
+                                """,contador,vuelo.getAvion().getCapacidadTotal(),BVendidos,BPagados,Ventas);
+                totalBoletos += BVendidos;
+                totalRecaudado += Ventas;
+            }
+        }
+        System.out.printf("""
+                --------------------------------------------------------------------------------------
+                    TOTAL BOLETOS : %-10d
+                --------------------------------------------------------------------------------------
+                    TOTAL RECAUDADO: %-10.2f
+                --------------------------------------------------------------------------------------
+                """,totalBoletos,totalRecaudado);
+    };
+
+    public void reporteEmpleadosActivos() {
+        reporteEmpleadosActivos.reporte();
+    }
+
+    public void reporteEmpleadosDistribucionAntiguedad(){
+        reporteEmpleadosDistribucionAntiguedad.reporte();
+    }
+
+    public void reporteEmpleadosSalario(){
+        reporteEmpleadosSalario.reporte();
+    }
+
+    public void reporteEmpleadosEdad(){
+        reporteEmpleadosEdad.reporte();
+    }
+
+    public void reporteVuelos(){
+        reporteVuelos.reporte();
+    }
+
+    public void reportePasajeroVuelo(){
+        reportePasajeroVuelo.reporte();
+    }
+
+    public void reporteVentasDia(){
+        reporteVentasDia.reporte();
+    }
+
+    public void reporteVentasMes(){
+        reporteVentasMes.reporte();
+    }
+
+    public void reporteVentasAnual(){
+        reporteVentasAnual.reporte();
+    }
+
+}

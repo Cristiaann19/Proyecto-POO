@@ -1,0 +1,28 @@
+package ClasesBase.Avion;
+
+public class PrimeraClase extends Seccion{
+    private final String nombre = "Primera Clase";
+    private boolean ServicioPremiun;
+    private boolean EspacioExtra;
+
+    public PrimeraClase(short capacidad, double precio, boolean servicioPremiun, boolean espacioExtra) {
+        super(capacidad, precio);
+        ServicioPremiun = servicioPremiun;
+        EspacioExtra = espacioExtra;
+    }
+
+    @Override
+    public String getNombre() {
+        return this.nombre;
+    }
+
+    @Override
+    public String toString() {
+        return "PrimeraClase{" +
+                "ServicioPremiun=" + ServicioPremiun +
+                ", EspacioExtra=" + EspacioExtra +
+                ", capacidad=" + capacidad +
+                ", precio=" + precio +
+                '}';
+    }
+}

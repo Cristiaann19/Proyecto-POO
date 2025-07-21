@@ -1,0 +1,93 @@
+package ClasesBase.Avion;
+
+import java.util.Arrays;
+import java.util.List;
+
+public class Avion {
+    private String Aereolinea;
+    private String Matricula;
+    private String Modelo;
+    private int CapacidadTotal;
+    private boolean Estado;
+    private final List<Seccion> Secciones;
+
+    public Avion(String matricula,String aereolinea ,String modelo, boolean estado, short capacidadTotal1, double precio1, boolean servicioPremiun, boolean espacioExtra, short capacidadTotal2, double precio2 , boolean prioridadEmbarque, boolean reclinacionMaxima, short capacidadTotal3, double precio3 , boolean entretenimiento, boolean limiteEquipaje) {
+        this.Matricula = matricula;
+        this.Aereolinea = aereolinea;
+        this.Modelo = modelo;
+        this.CapacidadTotal = capacidadTotal1+capacidadTotal2+capacidadTotal3;
+        this.Estado = estado;
+        this.Secciones = Arrays.asList(new PrimeraClase(capacidadTotal1,precio1,servicioPremiun,espacioExtra), new Ejecutivo (capacidadTotal2,precio2,prioridadEmbarque,reclinacionMaxima), new  Economico(capacidadTotal3,precio3,entretenimiento,limiteEquipaje));
+    }
+
+    //Getters y Setters
+
+    public String getAereolinea() {
+        return Aereolinea;
+    }
+
+    public void setAereolinea(String aereolinea) {
+        Aereolinea = aereolinea;
+    }
+
+    public String getMatricula() {
+        return Matricula;
+    }
+
+    public void setMatricula(String matricula) {
+        Matricula = matricula;
+    }
+
+    public String getModelo() {
+        return Modelo;
+    }
+
+    public void setModelo(String modelo) {
+        Modelo = modelo;
+    }
+
+    public int getCapacidadTotal() {
+        return CapacidadTotal;
+    }
+
+    public void setCapacidadTotal(int capacidadTotal) {
+        CapacidadTotal = capacidadTotal;
+    }
+
+    public boolean getEstado() {
+        return Estado;
+    }
+
+    public String getEstado_Text() {
+        if(Estado){
+            return "Disponible";
+        }else{
+            return "No Disponible";
+        }
+    }
+
+    public void setEstado(boolean estado) {
+        Estado = estado;
+    }
+
+    public List<Seccion> getSecciones() {
+        return Secciones;
+    }
+
+    public void agregarSeccion(Seccion seccion) {
+        this.Secciones.add(seccion);
+    }
+
+    @Override
+    public String toString() {
+        return "Avion :" +'\n'+
+                "Aereolinea : " + Aereolinea + '\n' +
+                "Matricula : " + Matricula + '\n' +
+                "Modelo : " + Modelo + '\n' +
+                "CapacidadTotal : " + CapacidadTotal +'\n' +
+                "Estado : " + getEstado_Text() + '\n' +
+                "Secciones : " + Secciones.get(0).getNombre() + '\n'+
+                "            " + Secciones.get(1).getNombre() + '\n'+
+                "            " + Secciones.get(2).getNombre() + '\n';
+    }
+}

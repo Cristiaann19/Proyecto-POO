@@ -1,0 +1,4 @@
+60051937,John,2006-07-08,johnchm007@example.com,913048853,2022-04-23,1500,Tarde,true,John,1234
+85522123,Cristian,2006-12-08,cristianzzz@example.com,984845126,2022-07-16,2000,Noche,true,Cristian,1234
+87654321,Jose,2004-03-27,joseseclen@example.com,987654321,2021-01-10,1500,Tarde,true,Jose,1234
+78412365,Alexandra,2004-03-17,alexandra567@example.com,912345789,2021-01-10,1500,Tarde,true,Alexandra,1234

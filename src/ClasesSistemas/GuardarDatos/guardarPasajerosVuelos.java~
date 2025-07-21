@@ -1,0 +1,108 @@
+package ClasesSistemas.GuardarDatos;
+
+import ClasesBase.Boleto;
+import ClasesBase.Vuelo;
+import ClasesBase.Persona.*;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public final class guardarPasajerosVuelos {
+    // Guardar vuelos en el formato especificado
+    public static void guardarVuelos(String archivo, List<Vuelo> vuelos) throws IOException {
+        String archivoTemporal = archivo + ".tmp";  // Crear archivo temporal
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivoTemporal))) {
+            for (Vuelo vuelo : vuelos) {
+                // Formato: Origen,Destino,Fecha,MatriculaAvion,DNI_Piloto1,DNI_Piloto2,DNI_Tripulante1-DNI_Tripulante2-DNI_Tripulante3-DNI_Tripulante4
+                String pilotos = vuelo.getPilotos().stream()
+                        .map(p -> String.valueOf(p.getDni()))
+                        .reduce((a, b) -> a + "," + b).orElse("");
+
+                String tripulantes = vuelo.getTripulacion().stream()
+                        .map(t -> String.valueOf(t.getDni()))
+                        .reduce((a, b) -> a + "-" + b).orElse("");
+
+                writer.write(String.format("%s,%s,%s,%s,%s,%s%n",
+                        vuelo.getOrigen(),
+                        vuelo.getDestino(),
+                        vuelo.getFecha(),
+                        vuelo.getAvion().getMatricula(),
+                        pilotos,
+                        tripulantes
+                ));
+            }
+        } catch (IOException e) {
+            System.err.println("Error al guardar los vuelos: " + e.getMessage());
+            throw e;
+        }
+
+        // Reemplazar el archivo original por el archivo temporal
+        renombrarArchivos.reemplazarArchivo(archivo, archivoTemporal);
+
+    }
+
+    // Guardar pasajeros en el formato especificado
+    public static void guardarPasajeros(String archivo, ArrayList<Vuelo> vuelos) throws IOException {
+        String archivoTemporal = archivo + ".tmp";  // Crear archivo temporal
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivoTemporal))) {
+            int cont = 1;  // Variable para numerar el vuelo (1, 2, 3, ...)
+            for (Vuelo vuelo : vuelos) {
+                // Iteramos sobre los boletos de cada vuelo
+                for (Boleto boleto : vuelo.getBoletos()) {
+                    // Obtener los datos del pasajero
+                    Pasajero pasajero = boleto.getPasajero();
+
+                    // Obtener los detalles del boleto
+                    int idBoleto = boleto.getIdBoleto();
+                    String clase = boleto.getClase();  // 1, 2, 3 (o valores como "Primera clase", "Ejecutivo", "Económica")
+                    boolean estadoPago = boleto.isEstado(); // Si está PAGADO o PENDIENTE
+
+                    // Mapear la clase de vuelo a los números correspondientes
+                    int claseNumero = 0;  // 0 es un valor por defecto, en caso de que no se encuentre la clase
+                    switch (clase) {
+                        case "Primera Clase":
+                            claseNumero = 1;
+                            break;
+                        case "Ejecutivo":
+                            claseNumero = 2;
+                            break;
+                        case "Economico":
+                            claseNumero = 3;
+                            break;
+                        default:
+                            // Si no se encuentra una clase válida, puedes manejarlo como quieras
+                            System.err.println("Clase no reconocida para el boleto con ID: " + idBoleto);
+                            break;
+                    }
+
+                    // Convertir el estado de pago (booleano) en texto "true" o "false"
+                    String estadoPagoTexto = estadoPago ? "true" : "false";
+
+                    // Escribir los datos del pasajero en el archivo temporal
+                    writer.write(pasajero.getDni() + "," +
+                            pasajero.getNombre() + "," +
+                            pasajero.getFechaNacimiento() + "," +
+                            pasajero.getEmail() + "," +
+                            pasajero.getTelefono() + "," +
+                            pasajero.getNacionalidad() + "," +
+                            cont + "," +  // Usamos el número del vuelo o índice como identificador
+                            claseNumero + "," +  // Ahora se guarda el número de clase (1, 2, 3)
+                            estadoPagoTexto);  // Guardar el estado como "true" o "false"
+                    writer.newLine();  // Nueva línea para el siguiente pasajero
+                }
+                cont++;  // Incrementamos el contador para el siguiente vuelo
+            }
+        } catch (IOException e) {
+            System.err.println("Error al guardar los pasajeros: " + e.getMessage());
+            throw e;
+        }
+
+        // Reemplazar el archivo original por el archivo temporal
+        renombrarArchivos.reemplazarArchivo(archivo, archivoTemporal);
+
+    }
+
+}

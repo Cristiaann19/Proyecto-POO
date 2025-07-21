@@ -1,0 +1,173 @@
+package ClasesSistemas;
+import ClasesBase.Avion.*;
+import ClasesBase.Persona.*;
+import ClasesBase.Vuelo;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class SistemaCarga {
+
+    public static List<Administrador> cargarAdministradores(String archivo) throws IOException {
+        archivo="C:\\Users\\johnc\\Desktop\\John\\ciclo IV\\POO\\ProyectoPOO_Aereopuerto\\src\\Datos\\Administradores.txt";
+        List<Administrador> administradores = new ArrayList<>();
+        List<String> lineas = Files.readAllLines(Paths.get(archivo));
+
+        for (String linea : lineas) {
+            String[] datos = linea.split(",");
+            Administrador admin = new Administrador(
+                    Integer.parseInt(datos[0]), // DNI
+                    datos[1],                  // Nombre
+                    LocalDate.parse(datos[2]), // Fecha de nacimiento
+                    datos[3],                  // Email
+                    Integer.parseInt(datos[4]),// Teléfono
+                    LocalDate.parse(datos[5]), // Fecha de contratación
+                    Double.parseDouble(datos[6]), // Salario
+                    datos[7],                  // Turno
+                    Boolean.parseBoolean(datos[8]), // Estado
+                    datos[9],                  // Usuario
+                    datos[10]                  // Contraseña
+            );
+            administradores.add(admin);
+        }
+        return administradores;
+    }
+
+    public static List<Mantenimiento> cargarMantenimientos(String archivo) throws IOException {
+        archivo="C:\\Users\\johnc\\Desktop\\John\\ciclo IV\\POO\\ProyectoPOO_Aereopuerto\\src\\Datos\\Mantenimientos.txt";
+        List<Mantenimiento> mantenimientos = new ArrayList<>();
+        List<String> lineas = Files.readAllLines(Paths.get(archivo));
+
+        for (String linea : lineas) {
+            String[] datos = linea.split(",");
+            List<String> apodos = Arrays.asList(datos[10].split(";"));
+            Mantenimiento mantenimiento = new Mantenimiento(
+                    Integer.parseInt(datos[0]), // DNI
+                    datos[1],                  // Nombre
+                    LocalDate.parse(datos[2]), // Fecha de nacimiento
+                    datos[3],                  // Email
+                    Integer.parseInt(datos[4]),// Teléfono
+                    LocalDate.parse(datos[5]), // Fecha de contratación
+                    Double.parseDouble(datos[6]), // Salario
+                    datos[7],                  // Turno
+                    Boolean.parseBoolean(datos[8]), // Estado
+                    datos[9],                  // Especialidad
+                    apodos                     // Lista de apodos
+            );
+            mantenimientos.add(mantenimiento);
+        }
+        return mantenimientos;
+    }
+
+    public static List<Piloto> cargarPilotos(String archivo) throws IOException {
+        archivo="C:\\Users\\johnc\\Desktop\\John\\ciclo IV\\POO\\ProyectoPOO_Aereopuerto\\src\\Datos\\Pilotos.txt";
+        List<Piloto> pilotos = new ArrayList<>();
+        List<String> lineas = Files.readAllLines(Paths.get(archivo));
+
+        for (String linea : lineas) {
+            String[] datos = linea.split(",");
+            List<String> idiomas = Arrays.asList(datos[11].split(";"));
+            Piloto piloto = new Piloto(
+                    Integer.parseInt(datos[0]), // DNI
+                    datos[1],                  // Nombre
+                    LocalDate.parse(datos[2]), // Fecha de nacimiento
+                    datos[3],                  // Email
+                    Integer.parseInt(datos[4]),// Teléfono
+                    LocalDate.parse(datos[5]), // Fecha de contratación
+                    Double.parseDouble(datos[6]), // Salario
+                    datos[7],                  // Turno
+                    Boolean.parseBoolean(datos[8]), // Estado
+                    Integer.parseInt(datos[9]), // Licencia de vuelo
+                    Integer.parseInt(datos[10]),// Horas de vuelo
+                    idiomas                     // Idiomas
+            );
+            pilotos.add(piloto);
+        }
+        return pilotos;
+    }
+
+    public static List<Tripulante> cargarTripulantes(String archivo) throws IOException {
+        archivo="C:\\Users\\johnc\\Desktop\\John\\ciclo IV\\POO\\ProyectoPOO_Aereopuerto\\src\\Datos\\Tripulantes.txt";
+        List<Tripulante> tripulantes = new ArrayList<>();
+        List<String> lineas = Files.readAllLines(Paths.get(archivo));
+
+        for (String linea : lineas) {
+            String[] datos = linea.split(",");
+            List<String> idiomas = Arrays.asList(datos[9].split(";"));
+            List<String> entrenamientos = Arrays.asList(datos[10].split(";"));
+            Tripulante tripulante = new Tripulante(
+                    Integer.parseInt(datos[0]), // DNI
+                    datos[1],                  // Nombre
+                    LocalDate.parse(datos[2]), // Fecha de nacimiento
+                    datos[3],                  // Email
+                    Integer.parseInt(datos[4]),// Teléfono
+                    LocalDate.parse(datos[5]), // Fecha de contratación
+                    Double.parseDouble(datos[6]), // Salario
+                    datos[7],                  // Turno
+                    Boolean.parseBoolean(datos[8]), // Estado
+                    datos[9],                  // Cargo
+                    idiomas,                   // Idiomas
+                    entrenamientos             // Entrenamientos
+            );
+            tripulantes.add(tripulante);
+        }
+        return tripulantes;
+    }
+
+    public static List<Avion> cargarAviones(String archivo) throws IOException {
+        archivo="C:\\Users\\johnc\\Desktop\\John\\ciclo IV\\POO\\ProyectoPOO_Aereopuerto\\src\\Datos\\Aviones.txt";
+        List<Avion> aviones = new ArrayList<>();
+        List<String> lineas = Files.readAllLines(Paths.get(archivo));
+
+        for (String linea : lineas) {
+            String[] datos = linea.split(",");
+            Avion avion = new Avion(
+                    datos[0],                  // Matrícula
+                    datos[1],                  // Aerolínea
+                    datos[2],                  // Modelo
+                    Boolean.parseBoolean(datos[3]), // Estado general
+                    Short.parseShort(datos[4]), // Capacidad económica
+                    Double.parseDouble(datos[5]), // Peso permitido económico
+                    Boolean.parseBoolean(datos[6]), // Clase económica habilitada
+                    Boolean.parseBoolean(datos[7]), // Clase ejecutiva habilitada
+                    Short.parseShort(datos[8]), // Capacidad ejecutiva
+                    Double.parseDouble(datos[9]), // Peso permitido ejecutiva
+                    Boolean.parseBoolean(datos[10]),// Primera clase habilitada
+                    Boolean.parseBoolean(datos[11]),// Internet disponible
+                    Short.parseShort(datos[12]),// Capacidad primera clase
+                    Double.parseDouble(datos[13]),// Peso permitido primera clase
+                    Boolean.parseBoolean(datos[14]),// Sistema entretenimiento
+                    Boolean.parseBoolean(datos[15]) // WiFi disponible
+            );
+            aviones.add(avion);
+        }
+        return aviones;
+    }
+
+    public static List<Vuelo> cargarVuelos(String archivo, List<Avion> aviones, List<Piloto> pilotos, List<Tripulante> tripulantes) throws IOException {
+        archivo="C:\\Users\\johnc\\Desktop\\John\\ciclo IV\\POO\\ProyectoPOO_Aereopuerto\\src\\Datos\\Vuelos.txt";
+        List<Vuelo> vuelos = new ArrayList<>();
+        List<String> lineas = Files.readAllLines(Paths.get(archivo));
+
+        for (String linea : lineas) {
+            String[] datos = linea.split(",");
+            Avion avion = aviones.get(Integer.parseInt(datos[3])); // Índice de avión
+            Vuelo vuelo = new Vuelo(
+                    datos[0],                  // Origen
+                    datos[1],                  // Destino
+                    LocalDate.parse(datos[2]), // Fecha
+                    avion,                     // Avión
+                    pilotos,                   // Lista de pilotos
+                    tripulantes                // Lista de tripulantes
+            );
+            vuelos.add(vuelo);
+        }
+        return vuelos;
+    }
+}
+

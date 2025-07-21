@@ -1,0 +1,27 @@
+package ClasesBase.Persona;
+
+import java.time.LocalDate;
+import java.util.List;
+
+public final class Tripulante extends Empleado {
+    private String Cargo;
+    private List<String> idiomas;
+    private List<String> Entrenamientos;
+
+    public Tripulante(int dni, String nombre, LocalDate fechaNacimiento, String email, int telefono, LocalDate fechaContratacion, double salario, String turno, boolean estado, String cargo, List<String> idiomas, List<String> entrenamientos) {
+        super(dni, nombre, fechaNacimiento, email, telefono, fechaContratacion, salario, turno, estado);
+        Cargo = cargo;
+        this.idiomas = idiomas;
+        Entrenamientos = entrenamientos;
+    }
+
+    @Override
+    public String toString() {
+        return "Tripulante:" +
+                "\n    Cargo: '" + Cargo + '\'' +
+                "\n    Idiomas: " + idiomas +
+                "\n    Entrenamientos: " + Entrenamientos +
+                "\n    Turno: '" + turno + '\'' +
+                "\n";
+    }
+}

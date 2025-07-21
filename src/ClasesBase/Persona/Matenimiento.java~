@@ -1,0 +1,32 @@
+package ClasesBase.Persona;
+
+import java.util.Date;
+import java.util.List;
+
+public class Matenimiento extends Empleado {
+    private String Especialidad;
+    private List<String> Certificaciones;
+
+    public Matenimiento(int dni, String nombre, Date fechaNacimiento, String email, int telefono, Date fechaContratacion, double salario, String turno, String estado, String especialidad, List<String> certificaciones) {
+        super(dni, nombre, fechaNacimiento, email, telefono, fechaContratacion, salario, turno, estado);
+        Especialidad = especialidad;
+        Certificaciones = certificaciones;
+    }
+
+    @Override
+    public String toString() {
+        return "Matenimiento{" +
+                "Especialidad='" + Especialidad + '\'' +
+                ", Certificaciones=" + Certificaciones +
+                ", FechaContratacion=" + FechaContratacion +
+                ", Salario=" + Salario +
+                ", turno='" + turno + '\'' +
+                ", Estado='" + Estado + '\'' +
+                ", Dni=" + Dni +
+                ", Nombre='" + Nombre + '\'' +
+                ", FechaNacimiento=" + FechaNacimiento +
+                ", Email='" + Email + '\'' +
+                ", Telefono=" + Telefono +
+                '}';
+    }
+}
